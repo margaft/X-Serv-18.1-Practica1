@@ -63,14 +63,18 @@ class acortadorURLs(webapp.webApp):
 			formulario = "<form method='POST' action=''><input type='text'" " name='url'> <input type='submit' ""value='Enviar'></form></body></html>"
 
 			if len(self.URLs_introcucidas) == 0:
-				contlistURLs = "<p>Todavía no hay ninguna URL acortada</p>"
+				contlistURLs = "<p>Todavia no hay ninguna URL acortada </p>"
 				listURLs = ""
 			else:
 				contlistURLs = "<p>URLs introducidas ----------- URLs acortadas:</p>"
 				listURLs = self.list_URLsAcort()
-				
+			global codigoHTTP
+			global cuerpoHTML	
 			codigoHTTP = "HTTP/1.1 200 OK"
 			cuerpoHTML = "<html><body>" + texto + formulario + contlistURLs + listURLs + "</body></html>"
+			
+		elif metodo == "GET" and recurso == "/favicon.ico":
+			return (NoEncontrado())
 												
 		elif metodo == "POST" and recurso == "/":
 
@@ -118,7 +122,7 @@ class acortadorURLs(webapp.webApp):
 						escribir = csv.writer(fichero)
 						escribir.writerow([URL_acortada, urlFormulario])
 					URLExiste = ""
-
+			
 				codigoHTTP = "HTTP/1.1 200 OK"
 				cuerpoHTML = "<html><body>" + texto + "<p><h2>" + URLExiste + "</h2></p>" +"<p>URL: <a href=" + urlFormulario + ">" + urlFormulario + "</a> <br> URL acortada: <a href=" + URL_acortada + ">" + URL_acortada + "</a></p></body></html>"
 
@@ -128,6 +132,7 @@ class acortadorURLs(webapp.webApp):
 				nrecurso = int(recurso[1:])
 			#Si no insertamos un número 
 			except ValueError:
+				
 				codigoHTTP = "HTTP/1.1 404 Not Found"
 				cuerpoHTML = "<html><body><h1>Introduzca un numero</h1></body></html>"
 				return (codigoHTTP, cuerpoHTML)
